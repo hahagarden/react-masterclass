@@ -22,6 +22,10 @@ const animation = keyframes`
   border-radius:0px;
 }`;
 
+const Emoji = styled.span`
+  font-size: 50px;
+`;
+
 const Box = styled.div`
   height: 200px;
   width: 200px;
@@ -30,20 +34,25 @@ const Box = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  span {
-    font-size: 50px;
+  ${Emoji} {
     &:hover {
       font-size: 10px;
     }
   }
-`; //Box styled처리, span target처리
+`; //Emoji(styled component) 자체도 targetting 가능
+/* 
+${Emoji}:hover{
+  font-size: 10px;
+} another pseudo-selector
+*/
 
 function App() {
   return (
     <Wrapper>
       <Box>
-        <span>🧛‍♂️</span>
+        <Emoji as="p">🧛‍♂️</Emoji>
       </Box>
+      <Emoji>🧚‍♀️</Emoji>
     </Wrapper>
   );
 }
