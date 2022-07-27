@@ -1,44 +1,50 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-const Father = styled.div`
+const Wrapper = styled.div`
   display: flex;
-`; //styled-components를 이용하면 자동으로 랜덤 class 생성해줌
-const Box = styled.div`
-  background-color: ${(props) => props.bgColor};
-  width: 100px;
-  height: 100px;
-`; //component props 사용
-const Text = styled.h1`
-  color: white;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
 `;
-const Circle = styled(Box)`
-  border-radius: 50px;
-`; //component 확장, props 속성 설정 가능
-const Btn = styled.button`
-  color: white;
+
+const animation = keyframes`
+0% {
+  transform:rotate(0deg);
+  border-radius:0px;
+}
+50% {
+  transform:rotate(360deg);
+  border-radius:100px;
+}
+100%{
+  transform:rotate(0deg);
+  border-radius:0px;
+}`;
+
+const Box = styled.div`
+  height: 200px;
+  width: 200px;
   background-color: tomato;
-  border: 0;
-  border-radius: 15px;
-`; //as="a" props HTML tag 바꿔줌
-const Input = styled.input.attrs({ required: true, minLength: 5 })`
-  background-color: teal;
-  color: white;
-`; //css뿐만 아니라 attrs({}) JS속성도 설정 가능
+  animation: ${animation} 1s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 50px;
+    &:hover {
+      font-size: 10px;
+    }
+  }
+`; //Box styled처리, span target처리
 
 function App() {
   return (
-    <Father>
-      <Box bgColor="teal">
-        <Text>Hello</Text>
+    <Wrapper>
+      <Box>
+        <span>🧛‍♂️</span>
       </Box>
-      <Circle bgColor="tomato" />
-      <Btn>Log in</Btn>
-      <Btn as="a" href="#">
-        Log in
-      </Btn>
-      <Input />
-      <Input />
-    </Father>
+    </Wrapper>
   );
 }
 
