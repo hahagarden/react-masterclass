@@ -4,24 +4,18 @@ const Father = styled.div`
   display: flex;
 `;
 
-const Button = styled.button`
+const Input = styled.input.attrs({ required: true, minLength: 10 })`
   background-color: ${(props) => props.bgColor};
-  width: 100px;
-  height: 100px;
-`;
-
-const Circle = styled(Button)`
-  border-radius: 50%;
 `;
 
 function App() {
   return (
     <Father>
-      <Button bgColor="teal">Log in</Button>
-      <Circle bgColor="tomato">Log in</Circle>
-      <Button as="a" href="/" bgColor="teal">
-        Log in
-      </Button>
+      <Input />
+      <Input />
+      <Input />
+      <Input />
+      <Input />
     </Father>
   );
 } // as="html_tag", change the existing Button html type "button" into anchor "a"
