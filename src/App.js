@@ -18,12 +18,20 @@ const Box = styled.div`
   width: 200px;
   background-color: tomato;
   animation: ${animation} 1s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 30px;
+  } //targeting span
 `;
 
 function App() {
   return (
     <Wrapper>
-      <Box />
+      <Box>
+        <span>🤩</span>
+      </Box>
     </Wrapper>
   );
 }
