@@ -2,6 +2,10 @@ import styled, { keyframes } from "styled-components";
 
 const Wrapper = styled.div`
   display: flex;
+  background-color: ${(props) => props.theme.backgroundColor};
+  span {
+    color: ${(props) => props.theme.textColor};
+  }
 `;
 
 const animation = keyframes`
@@ -41,6 +45,7 @@ function App() {
         <Emoji>🤩</Emoji>
       </Box>
       <Emoji>🔥</Emoji>
+      <span>hello</span>
     </Wrapper>
   );
 }
