@@ -23,7 +23,13 @@ const Box = styled.div`
   align-items: center;
   span {
     font-size: 30px;
-  } //targeting span
+    &:hover {
+      font-size: 50px;
+    }
+    &:active {
+      opacity: 0;
+    }
+  } //pseudo selector
 `;
 
 function App() {
