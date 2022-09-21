@@ -1,23 +1,31 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-const Father = styled.div`
+const Wrapper = styled.div`
   display: flex;
 `;
 
-const Input = styled.input.attrs({ required: true, minLength: 10 })`
-  background-color: ${(props) => props.bgColor};
+const animation = keyframes`
+from{
+  transform:rotate(0deg)
+}
+to{
+  transform:rotate(360deg)
+}
+`;
+
+const Box = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: tomato;
+  animation: ${animation} 1s linear infinite;
 `;
 
 function App() {
   return (
-    <Father>
-      <Input />
-      <Input />
-      <Input />
-      <Input />
-      <Input />
-    </Father>
+    <Wrapper>
+      <Box />
+    </Wrapper>
   );
-} // as="html_tag", change the existing Button html type "button" into anchor "a"
+}
 
 export default App;
