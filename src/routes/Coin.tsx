@@ -29,6 +29,30 @@ const Loader = styled.div`
   font-size: 20px;
 `;
 
+const Overview = styled.div`
+  background-color: black;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 25px;
+  border-radius: 10px;
+`;
+
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  span:first-child {
+    font-size: 15px;
+  }
+  span:last-child {
+    font-size: 20px;
+  }
+`;
+
+const Discription = styled.div`
+  padding: 20px;
+`;
+
 interface RouteState {
   name: string;
 }
@@ -105,6 +129,7 @@ function Coin() {
       ).json();
       setInfo(infoData);
       setPriceInfo(priceData);
+      setLoading(false);
     })();
   }, []);
   return (
@@ -113,6 +138,31 @@ function Coin() {
         <Title>Coin {state?.name || "Loading..."}</Title>
       </Header>
       {loading ? <Loader>Loading...</Loader> : null}
+      <Overview>
+        <OverviewItem>
+          <span>RANK:</span>
+          <span>{info?.rank}</span>
+        </OverviewItem>
+        <OverviewItem>
+          <span>SYMBOL:</span>
+          <span>{info?.symbol}</span>
+        </OverviewItem>
+        <OverviewItem>
+          <span>OPEN SOURCE:</span>
+          <span>{info?.open_source ? "YES" : "NO"}</span>
+        </OverviewItem>
+      </Overview>
+      <Discription>{info?.description}</Discription>
+      <Overview>
+        <OverviewItem>
+          <span>TOTAL SUPPLY:</span>
+          <span>{priceInfo?.total_supply}</span>
+        </OverviewItem>
+        <OverviewItem>
+          <span>MAX SUPPLY:</span>
+          <span>{priceInfo?.max_supply}</span>
+        </OverviewItem>
+      </Overview>
     </Container>
   );
 }
