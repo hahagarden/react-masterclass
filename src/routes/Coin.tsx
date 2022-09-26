@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchCoinInfo, fetchCoinPriceInfo } from "./api";
 
 interface Params {
