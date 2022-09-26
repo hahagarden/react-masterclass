@@ -12,6 +12,7 @@ import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCoinInfo, fetchCoinPriceInfo } from "./api";
+import { Helmet } from "react-helmet";
 
 interface Params {
   coinId: string;
@@ -154,11 +155,17 @@ function Coin() {
   );
   const { isLoading: priceLoading, data: priceData } = useQuery<IPriceData>(
     ["price", coinId],
-    () => fetchCoinPriceInfo(coinId)
+    () => fetchCoinPriceInfo(coinId),
+    { refetchInterval: 5000 }
   );
   const loading = infoLoading && priceLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
@@ -178,8 +185,8 @@ function Coin() {
               <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>OPEN SOURCE:</span>
-              <span>{infoData?.open_source ? "YES" : "NO"}</span>
+              <span>PRICE:</span>
+              <span>{priceData?.quotes.USD.price.toFixed(2)}</span>
             </OverviewItem>
           </Overview>
           <Discription>{infoData?.description}</Discription>
