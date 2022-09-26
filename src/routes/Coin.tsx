@@ -10,6 +10,8 @@ import {
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinPriceInfo } from "./api";
 
 interface Params {
   coinId: string;
@@ -142,75 +144,75 @@ interface IPriceData {
 }
 
 function Coin() {
-  const [loading, setLoading] = useState(true);
   const { coinId } = useParams<Params>();
   const { state } = useLocation<RouteState>();
-  const [info, setInfo] = useState<IInfoData>();
-  const [priceInfo, setPriceInfo] = useState<IPriceData>();
   const priceMatch = useRouteMatch("/:coinId/price");
   const chartMatch = useRouteMatch("/:coinId/chart");
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, []);
+  const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: priceLoading, data: priceData } = useQuery<IPriceData>(
+    ["price", coinId],
+    () => fetchCoinPriceInfo(coinId)
+  );
+  const loading = infoLoading && priceLoading;
   return (
     <Container>
       <Header>
-        <Title>Coin {state?.name || "Loading..."}</Title>
+        <Title>
+          {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
+        </Title>
       </Header>
-      {loading ? <Loader>Loading...</Loader> : null}
-      <Overview>
-        <OverviewItem>
-          <span>RANK:</span>
-          <span>{info?.rank}</span>
-        </OverviewItem>
-        <OverviewItem>
-          <span>SYMBOL:</span>
-          <span>{info?.symbol}</span>
-        </OverviewItem>
-        <OverviewItem>
-          <span>OPEN SOURCE:</span>
-          <span>{info?.open_source ? "YES" : "NO"}</span>
-        </OverviewItem>
-      </Overview>
-      <Discription>{info?.description}</Discription>
-      <Overview>
-        <OverviewItem>
-          <span>TOTAL SUPPLY:</span>
-          <span>{priceInfo?.total_supply}</span>
-        </OverviewItem>
-        <OverviewItem>
-          <span>MAX SUPPLY:</span>
-          <span>{priceInfo?.max_supply}</span>
-        </OverviewItem>
-      </Overview>
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>RANK:</span>
+              <span>{infoData?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>SYMBOL:</span>
+              <span>{infoData?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>OPEN SOURCE:</span>
+              <span>{infoData?.open_source ? "YES" : "NO"}</span>
+            </OverviewItem>
+          </Overview>
+          <Discription>{infoData?.description}</Discription>
+          <Overview>
+            <OverviewItem>
+              <span>TOTAL SUPPLY:</span>
+              <span>{priceData?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>MAX SUPPLY:</span>
+              <span>{priceData?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
 
-      <Tabs>
-        <Tab isActive={priceMatch !== null}>
-          <Link to={`/${coinId}/price`}>PRICE</Link>
-        </Tab>
-        <Tab isActive={chartMatch !== null}>
-          <Link to={`/${coinId}/chart`}>CHART</Link>
-        </Tab>
-      </Tabs>
+          <Tabs>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>PRICE</Link>
+            </Tab>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>CHART</Link>
+            </Tab>
+          </Tabs>
 
-      <Switch>
-        <Route path={`/${coinId}/price`}>
-          <Price />
-        </Route>
-        <Route path={`/:coinId/chart`}>
-          <Chart />
-        </Route>
-      </Switch>
+          <Switch>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+            <Route path={`/:coinId/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
+        </>
+      )}
     </Container>
   );
 }
