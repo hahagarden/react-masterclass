@@ -53,6 +53,12 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+  &:nth-child(3) {
+    span:last-child {
+      color: ${(props) => props.theme.accentColor};
+      font-weight: 600;
+    }
+  }
   span:first-child {
     font-size: 15px;
   }
@@ -186,7 +192,7 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>PRICE:</span>
-              <span>{priceData?.quotes.USD.price.toFixed(2)}</span>
+              <span>{priceData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Discription>{infoData?.description}</Discription>
@@ -203,7 +209,14 @@ function Coin() {
 
           <Tabs>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>PRICE</Link>
+              <Link
+                to={{
+                  pathname: `/${coinId}/price`,
+                  state: { priceData: priceData },
+                }}
+              >
+                PRICE
+              </Link>
             </Tab>
             <Tab isActive={chartMatch !== null}>
               <Link to={`/${coinId}/chart`}>CHART</Link>
