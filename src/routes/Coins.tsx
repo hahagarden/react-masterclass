@@ -62,7 +62,11 @@ interface ICoins {
   type: string;
 }
 
-function Coins() {
+interface CoinsProps {
+  onClick: () => void;
+}
+
+function Coins({ onClick }: CoinsProps) {
   const { isLoading, data } = useQuery<ICoins[]>(["allCoins"], fetchCoins);
   return (
     <Container>
@@ -71,6 +75,7 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>Coin World</Title>
+        <button onClick={onClick}>theme Mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>

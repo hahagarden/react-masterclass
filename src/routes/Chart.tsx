@@ -6,6 +6,7 @@ import { validateLocaleAndSetLanguage } from "typescript";
 
 interface ChartProps {
   coinId: string;
+  isDarked: boolean;
 }
 
 interface IData {
@@ -19,7 +20,7 @@ interface IData {
   volume: string;
 }
 
-function Chart({ coinId }: ChartProps) {
+function Chart({ coinId, isDarked }: ChartProps) {
   const { isLoading, data } = useQuery<IData[]>(["ohlcv", coinId], () =>
     fetchCoinHistory(coinId)
   );
@@ -40,7 +41,7 @@ function Chart({ coinId }: ChartProps) {
           ]}
           options={{
             theme: {
-              mode: "dark",
+              mode: isDarked ? "dark" : "light",
             },
             chart: {
               background: "transparent",

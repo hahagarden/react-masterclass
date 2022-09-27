@@ -1,5 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./theme";
+import { useState } from "react";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap');
@@ -65,10 +68,16 @@ a {
 `;
 
 function App() {
+  const [isDarked, setDarked] = useState(false);
+  const onClick = () => {
+    setDarked((current) => !current);
+  };
   return (
     <>
-      <GlobalStyle />
-      <Router />
+      <ThemeProvider theme={isDarked ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <Router isDarked={isDarked} onClick={onClick} />
+      </ThemeProvider>
     </>
   ); //<>Fragment
 }
