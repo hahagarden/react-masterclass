@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 function ToDoList() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState } = useForm();
   const onValid = (data: any) => {
     console.log(data);
   };
+  console.log(formState.errors);
   return (
     <div>
       <form
@@ -17,7 +18,13 @@ function ToDoList() {
           placeholder="email"
         />
         <input {...register("username")} placeholder="username" />
-        <input {...register("password")} placeholder="password" />
+        <input
+          {...register("password", {
+            required: "password is required",
+            minLength: { value: 3, message: "password is too short" },
+          })}
+          placeholder="password"
+        />
         <input {...register("passwordcheck")} placeholder="password check" />
         <button>submit</button>
       </form>
