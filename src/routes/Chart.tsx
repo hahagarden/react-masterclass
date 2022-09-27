@@ -3,10 +3,11 @@ import { fetchCoinHistory } from "./api";
 import ApexChart from "react-apexcharts";
 import { getValue } from "@testing-library/user-event/dist/utils";
 import { validateLocaleAndSetLanguage } from "typescript";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 interface ChartProps {
   coinId: string;
-  isDarked: boolean;
 }
 
 interface IData {
@@ -20,10 +21,11 @@ interface IData {
   volume: string;
 }
 
-function Chart({ coinId, isDarked }: ChartProps) {
+function Chart({ coinId }: ChartProps) {
   const { isLoading, data } = useQuery<IData[]>(["ohlcv", coinId], () =>
     fetchCoinHistory(coinId)
   );
+  const isDarked = useRecoilValue(isDarkAtom);
 
   return (
     <div>
