@@ -6,6 +6,7 @@ interface IForm {
   username?: string;
   password: string;
   passwordcheck?: string;
+  extraError?: string;
 }
 
 function ToDoList() {
@@ -13,17 +14,25 @@ function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
   const onValid = (data: IForm) => {
-    console.log(data);
+    if (data.password !== data.passwordcheck)
+      setError(
+        "passwordcheck",
+        { message: "Password are not the same" },
+        { shouldFocus: true }
+      );
+    //setError("extraError", { message: "Server offline" });
   };
   console.log(errors);
   return (
     <div>
+      <span>{errors?.extraError?.message}</span>
       <form
         style={{ display: "flex", flexDirection: "column" }}
         onSubmit={handleSubmit(onValid)}
@@ -35,6 +44,8 @@ function ToDoList() {
               value: /^[A-Za-z0-9._%+-]+@naver\.com$/,
               message: "Only naver.com emails allowed",
             },
+            validate: (myinput) =>
+              myinput.includes("nico") ? "no nico in email" : true,
           })}
           placeholder="email"
         />
