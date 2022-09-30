@@ -15,12 +15,6 @@ export const toDosSelector = selector({
   get: ({ get }) => {
     const toDos = get(toDosAtom);
     const category = get(categoryAtom);
-
-    if (category === "TO_DO")
-      return toDos.filter((toDo) => toDo.category === "TO_DO");
-    if (category === "DOING")
-      return toDos.filter((toDo) => toDo.category === "DOING");
-    if (category === "DONE")
-      return toDos.filter((toDo) => toDo.category === "DONE");
+    return toDos.filter((toDo) => toDo.category === category);
   },
 });
