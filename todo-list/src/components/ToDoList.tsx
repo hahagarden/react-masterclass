@@ -1,7 +1,7 @@
 import { useRecoilValue, useRecoilState } from "recoil";
 import { categoryAtom, toDosSelector } from "./atoms";
 import CreateToDo from "./CreateToDo";
-import AddToDo from "./AddToDo";
+import PaintToDo from "./PaintToDo";
 
 function ToDoList() {
   const toDos = useRecoilValue(toDosSelector);
@@ -20,7 +20,7 @@ function ToDoList() {
       </select>
       <CreateToDo />
       {toDos?.map((toDo) => (
-        <AddToDo key={toDo.id} {...toDo} />
+        <PaintToDo key={toDo.id} {...toDo} />
       ))}
     </div>
   );

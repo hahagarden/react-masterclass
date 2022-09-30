@@ -1,7 +1,7 @@
 import { useSetRecoilState } from "recoil";
 import { ItoDos, toDosAtom } from "./atoms";
 
-function AddToDo({ text, category, id }: ItoDos) {
+function PaintToDo({ text, category, id }: ItoDos) {
   const setToDos = useSetRecoilState(toDosAtom);
   const onClick = (newCategory: ItoDos["category"]) => {
     setToDos((oldToDos) => {
@@ -30,4 +30,4 @@ function AddToDo({ text, category, id }: ItoDos) {
   );
 }
 
-export default AddToDo;
+export default PaintToDo;
