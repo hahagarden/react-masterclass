@@ -6,8 +6,8 @@ import PaintToDo from "./PaintToDo";
 function ToDoList() {
   const toDos = useRecoilValue(toDosSelector);
   const [category, setCategory] = useRecoilState(categoryAtom);
-  const onInput = (selectedCategory: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(selectedCategory.currentTarget.value);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCategory(event.currentTarget.value as any);
   };
   return (
     <div>
