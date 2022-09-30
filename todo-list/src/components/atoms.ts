@@ -8,14 +8,19 @@ export interface ItoDos {
 
 export const toDosAtom = atom<ItoDos[]>({ key: "toDos", default: [] });
 
+export const categoryAtom = atom({ key: "category", default: "TO_DO" });
+
 export const toDosSelector = selector({
   key: "toDosSelector",
   get: ({ get }) => {
     const toDos = get(toDosAtom);
-    return [
-      toDos.filter((toDo) => toDo.category === "TO_DO"),
-      toDos.filter((toDo) => toDo.category === "DOING"),
-      toDos.filter((toDo) => toDo.category === "DONE"),
-    ];
+    const category = get(categoryAtom);
+
+    if (category === "TO_DO")
+      return toDos.filter((toDo) => toDo.category === "TO_DO");
+    if (category === "DOING")
+      return toDos.filter((toDo) => toDo.category === "DOING");
+    if (category === "DONE")
+      return toDos.filter((toDo) => toDo.category === "DONE");
   },
 });
