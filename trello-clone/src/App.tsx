@@ -1,4 +1,9 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { toDosAtom } from "./atoms";
@@ -36,8 +41,14 @@ const Card = styled.div`
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDosAtom);
-  const onDragEnd = (arg: any) => {
-    console.log(arg);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    setToDos((prevToDos) => {
+      const copyToDos = [...prevToDos];
+      copyToDos.splice(source.index, 1);
+      copyToDos.splice(destination?.index, 0, draggableId);
+      return copyToDos;
+    });
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -47,7 +58,7 @@ function App() {
             {(magic) => (
               <Board ref={magic.innerRef} {...magic.droppableProps}>
                 {toDos.map((toDo, index) => (
-                  <Draggable key={index} draggableId={toDo} index={index}>
+                  <Draggable key={toDo} draggableId={toDo} index={index}>
                     {(magic) => (
                       <Card
                         ref={magic.innerRef}
@@ -67,6 +78,6 @@ function App() {
       </Wrapper>
     </DragDropContext>
   );
-}
+} //draggable key and draggableId must be same
 
 export default App;
