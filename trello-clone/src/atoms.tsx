@@ -1,6 +1,14 @@
 import { atom } from "recoil";
 
-export const toDosAtom = atom({
+interface IToDosAtom {
+  [key: string]: string[];
+} //[key: string] so that user can add boards.
+
+export const toDosAtom = atom<IToDosAtom>({
   key: "toDo",
-  default: ["a", "b", "c", "d", "e"],
+  default: {
+    to_do: ["a", "b"],
+    doing: ["c", "d"],
+    done: ["e", "f"],
+  },
 });
