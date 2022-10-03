@@ -1,14 +1,19 @@
 import { atom } from "recoil";
 
+export interface IToDo {
+  id: number;
+  text: string;
+}
+
 interface IToDosAtom {
-  [key: string]: string[];
+  [key: string]: IToDo[];
 }
 
 export const toDosAtom = atom<IToDosAtom>({
   key: "toDo",
   default: {
-    "To Do": ["a", "b"],
-    Doing: ["c", "d"],
-    Done: ["e", "f"],
+    "To Do": [],
+    Doing: [],
+    Done: [],
   },
 });
