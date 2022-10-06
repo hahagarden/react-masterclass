@@ -6,6 +6,7 @@ import { fetchCoins } from "./api";
 import { Helmet } from "react-helmet";
 import { useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atoms";
+import Widget from "./Widget";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -65,17 +66,15 @@ interface ICoins {
 }
 
 function Coins() {
-  const setDark = useSetRecoilState(isDarkAtom);
-  const toggleDarkAtom = () => setDark((current) => !current);
   const { isLoading, data } = useQuery<ICoins[]>(["allCoins"], fetchCoins);
   return (
     <Container>
+      <Widget />
       <Helmet>
         <title>Coin World</title>
       </Helmet>
       <Header>
         <Title>Coin World</Title>
-        <button onClick={toggleDarkAtom}>theme Mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>

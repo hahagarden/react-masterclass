@@ -13,6 +13,7 @@ import Chart from "./Chart";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCoinInfo, fetchCoinPriceInfo } from "./api";
 import { Helmet } from "react-helmet";
+import Widget from "./Widget";
 
 interface Params {
   coinId: string;
@@ -42,7 +43,7 @@ const Loader = styled.div`
 `;
 
 const Overview = styled.div`
-  background-color: black;
+  background-color: ${(props) => props.theme.overViewColor};
   display: flex;
   justify-content: space-between;
   padding: 15px 25px;
@@ -53,6 +54,9 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+  span {
+    color: ${(props) => props.theme.textColor};
+  }
   &:nth-child(3) {
     span:last-child {
       color: ${(props) => props.theme.accentColor};
@@ -81,10 +85,11 @@ const Tabs = styled.div`
 const Tab = styled.div<{ isActive: boolean }>`
   text-align: center;
   font-size: 15px;
-  background-color: black;
+  background-color: ${(props) => props.theme.overViewColor};
   padding: 10px;
   a {
     display: block;
+    font-weight: ${(props) => (props.isActive ? 600 : 400)};
     color: ${(props) =>
       props.isActive ? props.theme.accentColor : props.theme.textColor};
   }
@@ -167,6 +172,7 @@ function Coin() {
   const loading = infoLoading && priceLoading;
   return (
     <Container>
+      <Widget />
       <Helmet>
         <title>
           {state?.name ? state?.name : loading ? "Loading..." : infoData?.name}
