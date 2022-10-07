@@ -19,10 +19,16 @@ const Card = styled.div<{ isDragging: boolean }>`
 `;
 
 function DraggableCard({ toDo, index }: IDraggableCardProps) {
+  const onDoubleClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    console.log(event.currentTarget.dataset.rbdDraggableId);
+  };
   return (
     <Draggable key={toDo.id} draggableId={toDo.id + ""} index={index}>
       {(provided, snapshot) => (
         <Card
+          onDoubleClick={onDoubleClick}
           isDragging={snapshot.isDragging}
           ref={provided.innerRef}
           {...provided.draggableProps}

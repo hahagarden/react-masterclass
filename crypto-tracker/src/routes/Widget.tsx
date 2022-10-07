@@ -4,6 +4,7 @@ import { isDarkAtom } from "../atoms";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { faGrinStars } from "@fortawesome/free-regular-svg-icons";
 
 const Box = styled.div`
   position: absolute;
