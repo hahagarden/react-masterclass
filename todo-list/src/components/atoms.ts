@@ -27,7 +27,7 @@ export const toDosAtom = atom<ItoDos[]>({
 
 export const categoryListAtom = atom({
   key: "categoryList",
-  default: { TO_DO: [], DOING: [], DONE: [] },
+  default: { ToDo: [], Doing: [], Done: [] },
 });
 
 export const categoryAtom = atom({

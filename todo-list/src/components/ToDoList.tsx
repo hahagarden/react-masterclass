@@ -8,22 +8,22 @@ function ToDoList() {
   const toDos = useRecoilValue(toDosSelector);
   const [category, setCategory] = useRecoilState(categoryAtom);
   const [addCategory, setAddCategory] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
-  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+  const [inputText, setInputText] = useState("");
+  const [categories, setCategories] = useRecoilState(categoryListAtom);
+  const onSetCategory = (event: React.FormEvent<HTMLSelectElement>) => {
     setCategory(event.currentTarget.value);
   };
-  const [categories, setCategories] = useRecoilState(categoryListAtom);
-  const onClick = () => setAddCategory((current) => !current);
+  const onAddCategory = () => setAddCategory((current) => !current);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
     } = event;
-    setNewCategory(value);
+    setInputText(value);
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setCategories((prev) => {
-      return { ...prev, [newCategory]: [] };
+      return { ...prev, [inputText]: [] };
     });
     setAddCategory(false);
   };
@@ -31,7 +31,7 @@ function ToDoList() {
     <div>
       <h1>To Dos</h1>
       <hr />
-      <select value={category} onInput={onInput}>
+      <select value={category} onInput={onSetCategory}>
         <option value="none" selected>
           ==category==
         </option>
@@ -41,14 +41,14 @@ function ToDoList() {
           </option>
         ))}
       </select>
-      <button onClick={onClick}>
+      <button onClick={onAddCategory}>
         {addCategory ? "cancel" : "add category"}
       </button>
       {addCategory ? (
         <div style={{ display: "inline-block" }}>
           <form onSubmit={onSubmit}>
             <input
-              value={newCategory}
+              value={inputText}
               onChange={onChange}
               type="text"
               placeholder="add new category"
