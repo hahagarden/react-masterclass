@@ -25,6 +25,7 @@ function CreateToDo() {
           required: "plaese write a to-do",
         })}
         placeholder="write a to-do"
+        disabled={category == "none"}
       ></input>
       <button>submit</button>
     </form>

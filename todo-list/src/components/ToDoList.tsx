@@ -32,6 +32,9 @@ function ToDoList() {
       <h1>To Dos</h1>
       <hr />
       <select value={category} onInput={onInput}>
+        <option value="none" selected>
+          ==category==
+        </option>
         {Object.keys(categories).map((each, index) => (
           <option key={index} value={each}>
             {each}

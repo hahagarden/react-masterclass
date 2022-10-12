@@ -6,7 +6,24 @@ export interface ItoDos {
   category: string;
 }
 
-export const toDosAtom = atom<ItoDos[]>({ key: "toDos", default: [] });
+const localStorageEffect =
+  (key: string) =>
+  ({ setSelf, onSet }: any) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue != null) {
+      setSelf(JSON.parse(savedValue));
+    }
+
+    onSet((newValue: ItoDos[]) => {
+      localStorage.setItem(key, JSON.stringify(newValue));
+    });
+  };
+
+export const toDosAtom = atom<ItoDos[]>({
+  key: "toDos",
+  default: [],
+  effects: [localStorageEffect("toDos")],
+});
 
 export const categoryListAtom = atom({
   key: "categoryList",
@@ -15,7 +32,7 @@ export const categoryListAtom = atom({
 
 export const categoryAtom = atom({
   key: "category",
-  default: "TO DO",
+  default: "none",
 });
 
 export const toDosSelector = selector({
