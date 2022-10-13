@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { toDosAtom } from "./atoms";
 import DroppableBoard from "./components/DroppableBoard";
+import AddBoard from "./components/AddBoard";
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100vw;
   margin: 0 auto;
   justify-content: center;
@@ -51,6 +53,7 @@ function App() {
       });
     }
   };
+  const onAddBoard = () => {};
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -63,6 +66,7 @@ function App() {
             />
           ))}
         </Boards>
+        <AddBoard />
       </Wrapper>
     </DragDropContext>
   );
