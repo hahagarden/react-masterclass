@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled(motion.div)`
@@ -8,6 +8,17 @@ const Wrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const BiggerBox = styled.div`
+  width: 600px;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 `;
 
 const Box = styled(motion.div)`
@@ -20,15 +31,6 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const Circle = styled(motion.div)`
-  background-color: white;
-  height: 70px;
-  width: 70px;
-  place-self: center;
-  border-radius: 35px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-`;
-
 const boxVariants = {
   hover: { scale: 1.5, rotateZ: 90 },
   click: { scale: 1, borderRadius: "100px" },
@@ -36,15 +38,22 @@ const boxVariants = {
 };
 
 function App() {
+  const biggerBoxRef = useRef<HTMLDivElement>(null);
+
   return (
     <Wrapper>
-      <Box
-        drag
-        whileDrag="drag"
-        variants={boxVariants}
-        whileHover="hover"
-        whileTap="click"
-      />
+      <BiggerBox ref={biggerBoxRef}>
+        <Box
+          drag
+          dragSnapToOrigin
+          dragElastic={0.5}
+          dragConstraints={biggerBoxRef}
+          whileDrag="drag"
+          variants={boxVariants}
+          whileHover="hover"
+          whileTap="click"
+        />
+      </BiggerBox>
     </Wrapper>
   );
 }
