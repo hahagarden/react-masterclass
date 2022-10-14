@@ -30,40 +30,21 @@ const Circle = styled(motion.div)`
 `;
 
 const boxVariants = {
-  start: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  end: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      duration: 1,
-      bounce: 0.5,
-      delayChildren: 1,
-      staggerChildren: 0.2,
-    },
-  },
-}; //orchestria
-
-const circleVariants = {
-  start: { opacity: 0, y: 10 },
-  end: {
-    opacity: 1,
-    y: 0,
-  },
+  hover: { scale: 1.5, rotateZ: 90 },
+  click: { scale: 1, borderRadius: "100px" },
+  drag: { backgroundColor: "rgb(46,204,113)", transition: { duration: 3 } },
 };
 
 function App() {
   return (
     <Wrapper>
-      <Box variants={boxVariants} initial="start" animate="end">
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-        <Circle variants={circleVariants} />
-      </Box>
+      <Box
+        drag
+        whileDrag="drag"
+        variants={boxVariants}
+        whileHover="hover"
+        whileTap="click"
+      />
     </Wrapper>
   );
 }
