@@ -1,9 +1,9 @@
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, useScroll } from "framer-motion";
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled(motion.div)`
-  height: 100vh;
+  height: 200vh;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -48,12 +48,18 @@ function App() {
       "linear-gradient(135deg,#63ee00,#eeee00",
     ]
   );
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 3]);
+  /*   useEffect(() => {
+    scrollY.onChange(() => console.log(scrollY.get(), scrollYProgress.get()));
+  }, [scrollY, scrollYProgress]); */
+
   /* useEffect(() => {
     potato.onChange(() => console.log(potato.get()));
   }, [a]); //useMotionValue do not re-render, its value do not change, so use useEffect to get the value. */
   return (
     <Wrapper style={{ background: gradient }}>
-      <Box drag="x" style={{ x: a, rotateZ }} dragSnapToOrigin />
+      <Box drag="x" style={{ x: a, rotateZ, scale: scale }} dragSnapToOrigin />
     </Wrapper>
   );
 }
