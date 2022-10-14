@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import React, { useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled(motion.div)`
@@ -10,7 +10,7 @@ const Wrapper = styled(motion.div)`
   align-items: center;
 `;
 
-const BiggerBox = styled.div`
+const BiggerBox = styled(motion.div)`
   width: 600px;
   height: 600px;
   background-color: rgba(255, 255, 255, 0.4);
@@ -38,22 +38,22 @@ const boxVariants = {
 };
 
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
-
+  const a = useMotionValue(0);
+  const rotateZ = useTransform(a, [-800, 800], [-360, 360]);
+  const gradient = useTransform(
+    a,
+    [-800, 800],
+    [
+      "linear-gradient(135deg,rgb(0,210,238),rgb(0,83,238)",
+      "linear-gradient(135deg,#63ee00,#eeee00",
+    ]
+  );
+  /* useEffect(() => {
+    potato.onChange(() => console.log(potato.get()));
+  }, [a]); //useMotionValue do not re-render, its value do not change, so use useEffect to get the value. */
   return (
-    <Wrapper>
-      <BiggerBox ref={biggerBoxRef}>
-        <Box
-          drag
-          dragSnapToOrigin
-          dragElastic={0.5}
-          dragConstraints={biggerBoxRef}
-          whileDrag="drag"
-          variants={boxVariants}
-          whileHover="hover"
-          whileTap="click"
-        />
-      </BiggerBox>
+    <Wrapper style={{ background: gradient }}>
+      <Box drag="x" style={{ x: a, rotateZ }} dragSnapToOrigin />
     </Wrapper>
   );
 }
