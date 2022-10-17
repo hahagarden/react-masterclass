@@ -14,6 +14,28 @@ import { useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
 import Slider from "./Slider";
 
+const genreArr: { [key: number]: string } = {
+  28: "Action",
+  12: "Adventure",
+  16: "Animation",
+  35: "Comedy",
+  80: "Crime",
+  99: "Documentary",
+  18: "Drama",
+  10751: "Family",
+  14: "Fantasy",
+  36: "History",
+  27: "Horror",
+  10402: "Music",
+  9648: "Mystery",
+  10749: "Romance",
+  878: "Science Fiction",
+  10770: "TV Movie",
+  53: "Thriller",
+  10752: "War",
+  37: "Western",
+};
+
 const Wrapper = styled.div`
   background-color: black;
   height: 100vh;
@@ -102,16 +124,19 @@ const BigTimes = styled.div`
   display: flex;
   align-items: center;
   span {
+    font-weight: 500;
     margin-right: 15px;
   }
 `;
 
 const BigGenre = styled.div`
   margin: 5px;
+  padding: 0 20px;
   display: flex;
   align-items: center;
   span {
-    padding: 0 20px;
+    font-weight: 500;
+    margin-right: 15px;
   }
 `;
 
@@ -212,17 +237,14 @@ function Home() {
                               />
                             )}
                           </span>
-                          {clickedMovie.runtime ? (
-                            <span>{`${clickedMovie.runtime}m`}</span>
-                          ) : null}
                         </BigTimes>
-                        {clickedMovie.genres ? (
-                          <BigGenre>
-                            {clickedMovie.genres?.map((genre) => (
-                              <span>{genre.name}</span>
-                            ))}
-                          </BigGenre>
-                        ) : null}
+
+                        <BigGenre>
+                          {clickedMovie.genre_ids.map((num) => (
+                            <span>{genreArr[num]}</span>
+                          ))}
+                        </BigGenre>
+
                         <BigOverview>{clickedMovie.overview}</BigOverview>
                       </BigInfo>
                     </>
