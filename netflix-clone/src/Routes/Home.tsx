@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { getMovies, IGetMoviesResult } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
+import { useNavigate, useMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -16,14 +17,14 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgImage: string }>`
+const Banner = styled.div<{ $bgPhoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 60px;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgImage});
+    url(${(props) => props.$bgPhoto});
   background-size: cover;
 `;
 
@@ -50,13 +51,14 @@ const Row = styled(motion.div)`
   position: absolute;
 `;
 
-const Box = styled(motion.div)<{ bgImage: string }>`
+const Box = styled(motion.div)<{ $bgPhoto: string }>`
   background-color: white;
   height: 200px;
   font-size: 40px;
-  background-image: url(${(props) => props.bgImage});
+  background-image: url(${(props) => props.$bgPhoto});
   background-size: cover;
   background-position: center center;
+  cursor: pointer;
   &:first-child {
     transform-origin: center left;
   }
@@ -112,13 +114,34 @@ const infoVariants = {
   },
 };
 
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+`;
+
+const BigMovie = styled(motion.div)`
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  background-color: red;
+
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+`;
+
 function Home() {
+  const navigator = useNavigate();
+  const bigMovieMatch = useMatch("/movies/:movieId");
   const offset = 6;
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   ); // useQuery: fetcher로 data와 로딩중여부를 알려줌
-  console.log(data, isLoading);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const increaseIndex = () => {
@@ -131,7 +154,13 @@ function Home() {
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
-
+  const movieClicked = (movieId: number) => {
+    navigator(`movies/${movieId}`);
+  };
+  const overlayClicked = () => {
+    navigator("/");
+  };
+  const { scrollY } = useScroll();
   return (
     <Wrapper>
       {isLoading ? (
@@ -140,7 +169,7 @@ function Home() {
         <>
           <Banner
             onClick={increaseIndex}
-            bgImage={makeImagePath(data?.results[0].backdrop_path || "")}
+            $bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
           >
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
@@ -160,12 +189,14 @@ function Home() {
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
                     <Box
+                      layoutId={movie.id + ""}
                       variants={boxVariants}
                       key={movie.id}
                       initial="normal"
                       whileHover="hover"
                       transition={{ type: "tween" }}
-                      bgImage={makeImagePath(movie.backdrop_path, "w500")}
+                      onClick={() => movieClicked(movie.id)}
+                      $bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
                     >
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
@@ -175,6 +206,21 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {bigMovieMatch ? (
+              <>
+                <Overlay
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={overlayClicked}
+                />
+                <BigMovie
+                  style={{ top: scrollY.get() + 100 }}
+                  layoutId={bigMovieMatch.params.movieId}
+                ></BigMovie>
+              </>
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
