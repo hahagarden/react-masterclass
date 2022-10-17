@@ -65,6 +65,9 @@ body {
   color:${(props) => props.theme.white.dark};
   line-height: 1.2;
   background-color:black;
+  ::-webkit-scrollbar {
+    display: none;
+    }
 }
 a {
   text-decoration:none;
