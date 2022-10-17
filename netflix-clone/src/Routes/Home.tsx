@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import {
-  getDataNowPlaying,
-  getDataTopRated,
-  getDataUpcoming,
-  getDataLatest,
+  getDataNowPlayingMovie,
+  getDataTopRatedMovie,
+  getDataUpcomingMovie,
+  getDataLatestMovie,
   INowPlaying,
   ITopRated,
 } from "../api";
@@ -16,7 +16,7 @@ import Slider from "./Slider";
 
 const Wrapper = styled.div`
   background-color: black;
-  height: 200vh;
+  height: 100vh;
 `;
 
 const Loader = styled.div`
@@ -47,7 +47,10 @@ const Overview = styled.p`
   width: 50%;
 `;
 
-const Sliders = styled.div``;
+const Sliders = styled.div`
+  position: relative;
+  top: -120px;
+`;
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -60,8 +63,8 @@ const Overlay = styled(motion.div)`
 
 const BigMovie = styled(motion.div)`
   position: absolute;
-  width: 40vw;
-  height: 80vh;
+  width: 50vw;
+  height: 70vh;
   background-color: ${(props) => props.theme.black.light};
   border-radius: 20px;
   right: 0;
@@ -71,7 +74,7 @@ const BigMovie = styled(motion.div)`
 
 const BigImage = styled.div`
   width: 100%;
-  height: 350px;
+  height: 400px;
   background-size: cover;
   background-position: center center;
 `;
@@ -85,9 +88,35 @@ const BigTitle = styled.h3`
   font-weight: 500;
 `;
 
-const BigOverview = styled.p`
+const BigInfo = styled.div`
   position: relative;
-  top: -75px;
+  top: -70px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const BigTimes = styled.div`
+  margin: 5px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  span {
+    margin-right: 15px;
+  }
+`;
+
+const BigGenre = styled.div`
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  span {
+    padding: 0 20px;
+  }
+`;
+
+const BigOverview = styled.p`
+  margin: 0px 5px;
   padding: 10px 20px;
   color: ${(props) => props.theme.white.light};
 `;
@@ -97,13 +126,13 @@ function Home() {
   const { scrollY } = useScroll();
 
   const { data: dataNowPlaying, isLoading: isLoadingNowPlaying } =
-    useQuery<INowPlaying>(["movies", "nowPlaying"], getDataNowPlaying);
+    useQuery<INowPlaying>(["movies", "nowPlaying"], getDataNowPlayingMovie);
   const { data: dataTopRated, isLoading: isLoadingTopRated } =
-    useQuery<ITopRated>(["movies", "topRated"], getDataTopRated);
+    useQuery<ITopRated>(["movies", "topRated"], getDataTopRatedMovie);
   const { data: dataUpcoming, isLoading: isLoadingUpcoming } =
-    useQuery<ITopRated>(["movies", "upcoming"], getDataUpcoming);
+    useQuery<ITopRated>(["movies", "upcoming"], getDataUpcomingMovie);
   const { data: dataLatest, isLoading: isLoadingLatest } =
-    useQuery<INowPlaying>(["movies", "latest"], getDataLatest);
+    useQuery<INowPlaying>(["movies", "latest"], getDataLatestMovie);
 
   const bigMovieMatch = useMatch("/movies/:name/:movieId");
   const overlayClicked = () => {
@@ -122,7 +151,7 @@ function Home() {
     whichData?.results.find(
       (movie) => movie.id + "" === bigMovieMatch.params.movieId
     );
-
+  console.log(clickedMovie);
   return (
     <Wrapper>
       {isLoadingNowPlaying && isLoadingTopRated && isLoadingUpcoming ? (
@@ -165,7 +194,37 @@ function Home() {
                         }}
                       />
                       <BigTitle>{clickedMovie.title}</BigTitle>
-                      <BigOverview>{clickedMovie.overview}</BigOverview>
+                      <BigInfo>
+                        <BigTimes>
+                          <span>
+                            {clickedMovie.release_date?.split("-")[0] || null}
+                          </span>
+                          <span>
+                            {clickedMovie.adult ? (
+                              <img
+                                style={{ width: "20px", height: "20px" }}
+                                src="https://cdn-icons-png.flaticon.com/512/8068/8068011.png"
+                              />
+                            ) : (
+                              <img
+                                style={{ width: "20px", height: "20px" }}
+                                src="	https://cdn-icons-png.flaticon.com/512/1688/1688198.png"
+                              />
+                            )}
+                          </span>
+                          {clickedMovie.runtime ? (
+                            <span>{`${clickedMovie.runtime}m`}</span>
+                          ) : null}
+                        </BigTimes>
+                        {clickedMovie.genres ? (
+                          <BigGenre>
+                            {clickedMovie.genres?.map((genre) => (
+                              <span>{genre.name}</span>
+                            ))}
+                          </BigGenre>
+                        ) : null}
+                        <BigOverview>{clickedMovie.overview}</BigOverview>
+                      </BigInfo>
                     </>
                   )}
                 </BigMovie>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {
-  getDataNowPlaying,
-  getDataTopRated,
+  getDataNowPlayingMovie,
+  getDataTopRatedMovie,
   INowPlaying,
   ITopRated,
 } from "../api";
