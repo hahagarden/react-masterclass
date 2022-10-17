@@ -12,7 +12,7 @@ interface IMovie {
   release_date: string;
 }
 
-export interface INowPlaying {
+export interface INowPlayingMovie {
   dates: {
     maximum: string;
     minimum: string;
@@ -23,7 +23,7 @@ export interface INowPlaying {
   totla_results: number;
 }
 
-export interface ITopRated {
+export interface ITopRatedMovie {
   page: number;
   results: IMovie[];
   total_pages: number;
@@ -52,6 +52,24 @@ export function getDataUpcomingMovie() {
   return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
+}
+
+export interface IShow {
+  backdrop_path: string;
+  first_air_date: string;
+  genre_ids: number[];
+  id: number;
+  name: string;
+  poster_path: string;
+  overview: string;
+  origin_country: string[];
+}
+
+export interface IDataShow {
+  page: number;
+  results: IShow[];
+  total_pages: number;
+  total_results: number;
 }
 
 export function getDataLatestShow() {

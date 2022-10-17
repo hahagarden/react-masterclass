@@ -4,15 +4,15 @@ import {
   getDataTopRatedMovie,
   getDataUpcomingMovie,
   getDataLatestMovie,
-  INowPlaying,
-  ITopRated,
+  INowPlayingMovie,
+  ITopRatedMovie,
 } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
-import Slider from "./Slider";
+import MovieSlider from "./MovieSlider";
 
 const genreArr: { [key: number]: string } = {
   28: "Action",
@@ -151,13 +151,16 @@ function Home() {
   const { scrollY } = useScroll();
 
   const { data: dataNowPlaying, isLoading: isLoadingNowPlaying } =
-    useQuery<INowPlaying>(["movies", "nowPlaying"], getDataNowPlayingMovie);
+    useQuery<INowPlayingMovie>(
+      ["movies", "nowPlaying"],
+      getDataNowPlayingMovie
+    );
   const { data: dataTopRated, isLoading: isLoadingTopRated } =
-    useQuery<ITopRated>(["movies", "topRated"], getDataTopRatedMovie);
+    useQuery<ITopRatedMovie>(["movies", "topRated"], getDataTopRatedMovie);
   const { data: dataUpcoming, isLoading: isLoadingUpcoming } =
-    useQuery<ITopRated>(["movies", "upcoming"], getDataUpcomingMovie);
+    useQuery<INowPlayingMovie>(["movies", "upcoming"], getDataUpcomingMovie);
   const { data: dataLatest, isLoading: isLoadingLatest } =
-    useQuery<INowPlaying>(["movies", "latest"], getDataLatestMovie);
+    useQuery<ITopRatedMovie>(["movies", "latest"], getDataLatestMovie);
 
   const bigMovieMatch = useMatch("/movies/:name/:movieId");
   const overlayClicked = () => {
@@ -192,9 +195,9 @@ function Home() {
             <Overview>{dataNowPlaying?.results[0].overview}</Overview>
           </Banner>
           <Sliders>
-            <Slider data={dataNowPlaying} name="Now Playing" />
-            <Slider data={dataTopRated} name="Top Rated" />
-            <Slider data={dataUpcoming} name="Upcoming" />
+            <MovieSlider data={dataNowPlaying} name="Now Playing" />
+            <MovieSlider data={dataTopRated} name="Top Rated" />
+            <MovieSlider data={dataUpcoming} name="Upcoming" />
           </Sliders>
           <AnimatePresence>
             {bigMovieMatch ? (
@@ -238,13 +241,11 @@ function Home() {
                             )}
                           </span>
                         </BigTimes>
-
                         <BigGenre>
                           {clickedMovie.genre_ids.map((num) => (
                             <span>{genreArr[num]}</span>
                           ))}
                         </BigGenre>
-
                         <BigOverview>{clickedMovie.overview}</BigOverview>
                       </BigInfo>
                     </>

@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import {
-  getDataNowPlayingMovie,
-  getDataTopRatedMovie,
-  INowPlaying,
-  ITopRated,
-} from "../api";
-import { useQuery } from "react-query";
+import { INowPlayingMovie, ITopRatedMovie } from "../api";
 import { makeImagePath } from "./utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
@@ -102,11 +96,11 @@ const infoVariants = {
 };
 
 interface ISlider {
-  data?: INowPlaying | ITopRated;
+  data?: INowPlayingMovie | ITopRatedMovie;
   name: string;
 }
 
-function Slider({ data, name }: ISlider) {
+function MovieSlider({ data, name }: ISlider) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
@@ -167,4 +161,4 @@ function Slider({ data, name }: ISlider) {
   );
 }
 
-export default Slider;
+export default MovieSlider;
