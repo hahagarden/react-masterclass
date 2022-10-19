@@ -11,25 +11,7 @@ import { makeImagePath } from "./utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useNavigate, useMatch } from "react-router-dom";
 import TvSlider from "./TvSlider";
-
-const genreArr: { [key: number]: string } = {
-  10759: "Action & Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  10762: "Kids",
-  9648: "Mystery",
-  10763: "News",
-  10764: "Reality",
-  10765: "Sci-Fi & Fantasy",
-  10766: "Soap",
-  10767: "Talk",
-  10768: "War & Politics",
-  37: "Western",
-};
+import { tvGenreArr } from "./utils";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -82,7 +64,7 @@ const BigShow = styled(motion.div)`
   position: absolute;
   width: 40vw;
   height: 80vh;
-  background-color: ${(props) => props.theme.black.light};
+  background-color: rgba(30, 30, 30, 1);
   border-radius: 20px;
   right: 0;
   left: 0;
@@ -91,7 +73,7 @@ const BigShow = styled(motion.div)`
 
 const BigImage = styled.div`
   width: 100%;
-  height: 350px;
+  height: 600px;
   background-size: cover;
   background-position: center center;
 `;
@@ -99,9 +81,9 @@ const BigImage = styled.div`
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.light};
   position: relative;
-  top: -75px;
+  top: -90px;
   padding: 20px;
-  font-size: 36px;
+  font-size: 48px;
   font-weight: 500;
 `;
 
@@ -111,6 +93,7 @@ const BigInfo = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  font-size: 20px;
 `;
 
 const BigTimes = styled.div`
@@ -120,7 +103,7 @@ const BigTimes = styled.div`
   align-items: center;
   span {
     font-weight: 500;
-    margin-right: 15px;
+    margin-right: 10px;
   }
 `;
 
@@ -205,7 +188,7 @@ function Tv() {
                     <>
                       <BigImage
                         style={{
-                          backgroundImage: `linear-gradient(to top,black,transparent),url(${makeImagePath(
+                          backgroundImage: `linear-gradient(to top,rgba(30,30,30,1),transparent),url(${makeImagePath(
                             clickedShow.backdrop_path,
                             "w500"
                           )})`,
@@ -221,7 +204,7 @@ function Tv() {
                         </BigTimes>
                         <BigGenre>
                           {clickedShow.genre_ids.map((num) => (
-                            <span>{genreArr[num]}</span>
+                            <span key={num}>{tvGenreArr[num]}</span>
                           ))}
                         </BigGenre>
                         <BigOverview>{clickedShow.overview}</BigOverview>

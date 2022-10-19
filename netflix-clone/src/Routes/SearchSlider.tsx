@@ -1,13 +1,13 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { IDataShow, INowPlayingMovie, IDataMovie } from "../api";
+import { IDataShow, IDataMovie } from "../api";
 import { makeImagePath } from "./utils";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
+import { useQueries, useQuery } from "react-query";
 
 const SliderWrapper = styled.div`
-  position: relative;
-  top: -100px;
   display: flex;
   flex-direction: column;
   padding: 20px 0px;
@@ -28,20 +28,20 @@ const SliderTitle = styled.h3`
 
 const SliderBox = styled.div`
   position: relative;
-  height: 200px;
+  height: 300px;
 `;
 
 const Row = styled(motion.div)`
   width: 100%;
   display: grid;
   gap: 5px;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   position: absolute;
 `;
 
 const Box = styled(motion.div)<{ $bgPhoto: string }>`
   background-color: white;
-  height: 200px;
+  height: 300px;
   font-size: 40px;
   background-image: url(${(props) => props.$bgPhoto});
   background-size: cover;
@@ -103,31 +103,30 @@ const infoVariants = {
   },
 };
 
-interface ISlider {
-  data?: INowPlayingMovie | IDataMovie;
+interface ISearchData {
+  data?: IDataMovie | IDataShow;
   name: string;
+  keyword: string | null;
 }
 
-function MovieSlider({ data, name }: ISlider) {
+function SearchSlider({ data, name, keyword }: ISearchData) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const toggleLeaving = () => setLeaving((prev) => !prev);
-
-  const offset = 6;
+  const offset = 4;
   const navigator = useNavigate();
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
       toggleLeaving();
-      const totalMovies = data?.results.length - 1;
+      const totalMovies = data?.results.length;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       setIndex((prev) => (index === maxIndex ? 0 : prev + 1));
     }
   };
   const movieClicked = (movieId: number) => {
-    navigator(`movies/${name.replace(" ", "")}/${movieId}`);
+    navigator(`/search/${name.replace(" ", "")}/${movieId}`);
   };
-
   return (
     <>
       <SliderWrapper>
@@ -146,7 +145,6 @@ function MovieSlider({ data, name }: ISlider) {
               key={index}
             >
               {data?.results
-                .slice(1)
                 .slice(offset * index, offset * index + offset)
                 .map((movie) => (
                   <Box
@@ -157,10 +155,14 @@ function MovieSlider({ data, name }: ISlider) {
                     whileHover="hover"
                     transition={{ type: "tween" }}
                     onClick={() => movieClicked(movie.id)}
-                    $bgPhoto={makeImagePath(movie.backdrop_path, "w780")}
+                    $bgPhoto={makeImagePath(movie.backdrop_path)}
                   >
                     <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
+                      {movie.title ? (
+                        <h4>{movie.title}</h4>
+                      ) : (
+                        <h4>{movie.name}</h4>
+                      )}
                     </Info>
                   </Box>
                 ))}
@@ -172,4 +174,4 @@ function MovieSlider({ data, name }: ISlider) {
   );
 }
 
-export default MovieSlider;
+export default SearchSlider;

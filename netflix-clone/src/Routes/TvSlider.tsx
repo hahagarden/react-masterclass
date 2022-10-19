@@ -3,7 +3,7 @@ import {
   getDataNowPlayingMovie,
   getDataTopRatedMovie,
   INowPlayingMovie,
-  ITopRatedMovie,
+  IDataMovie,
   IDataShow,
   IShow,
 } from "../api";
@@ -24,6 +24,13 @@ const SliderTitle = styled.h3`
   font-size: 30px;
   font-weight: 500;
   padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  span {
+    &:last-child {
+      color: gray;
+    }
+  }
 `;
 
 const SliderBox = styled.div`
@@ -81,13 +88,14 @@ const rowVariants = {
 const Info = styled(motion.div)`
   width: 100%;
   padding: 10px;
-  background-color: ${(props) => props.theme.black.light};
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
   opacity: 0;
   position: absolute;
   bottom: 0;
   h4 {
     text-align: center;
-    font-size: 18px;
+    font-size: 24px;
+    font-weight: 500;
   }
 `;
 
@@ -129,7 +137,10 @@ function TvSlider({ data, name }: ISlider) {
   return (
     <>
       <SliderWrapper>
-        <SliderTitle onClick={increaseIndex}>{name}</SliderTitle>
+        <SliderTitle onClick={increaseIndex}>
+          <span>{name}</span>
+          <span>≫</span>
+        </SliderTitle>
         <SliderBox>
           <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
             <Row

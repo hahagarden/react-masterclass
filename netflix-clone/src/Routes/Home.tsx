@@ -5,7 +5,7 @@ import {
   getDataUpcomingMovie,
   getDataLatestMovie,
   INowPlayingMovie,
-  ITopRatedMovie,
+  IDataMovie,
 } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
@@ -13,28 +13,7 @@ import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import { useNavigate, useMatch } from "react-router-dom";
 import MovieSlider from "./MovieSlider";
-
-const genreArr: { [key: number]: string } = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  14: "Fantasy",
-  36: "History",
-  27: "Horror",
-  10402: "Music",
-  9648: "Mystery",
-  10749: "Romance",
-  878: "Science Fiction",
-  10770: "TV Movie",
-  53: "Thriller",
-  10752: "War",
-  37: "Western",
-};
+import { movieGenreArr } from "./utils";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -85,9 +64,9 @@ const Overlay = styled(motion.div)`
 
 const BigMovie = styled(motion.div)`
   position: absolute;
-  width: 50vw;
+  width: 40vw;
   height: 70vh;
-  background-color: ${(props) => props.theme.black.light};
+  background-color: rgba(30, 30, 30, 1);
   border-radius: 20px;
   right: 0;
   left: 0;
@@ -96,7 +75,7 @@ const BigMovie = styled(motion.div)`
 
 const BigImage = styled.div`
   width: 100%;
-  height: 400px;
+  height: 600px;
   background-size: cover;
   background-position: center center;
 `;
@@ -104,9 +83,9 @@ const BigImage = styled.div`
 const BigTitle = styled.h3`
   color: ${(props) => props.theme.white.light};
   position: relative;
-  top: -75px;
+  top: -90px;
   padding: 20px;
-  font-size: 36px;
+  font-size: 48px;
   font-weight: 500;
 `;
 
@@ -116,6 +95,7 @@ const BigInfo = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  font-size: 20px;
 `;
 
 const BigTimes = styled.div`
@@ -136,7 +116,7 @@ const BigGenre = styled.div`
   align-items: center;
   span {
     font-weight: 500;
-    margin-right: 15px;
+    margin-right: 10px;
   }
 `;
 
@@ -156,11 +136,13 @@ function Home() {
       getDataNowPlayingMovie
     );
   const { data: dataTopRated, isLoading: isLoadingTopRated } =
-    useQuery<ITopRatedMovie>(["movies", "topRated"], getDataTopRatedMovie);
+    useQuery<IDataMovie>(["movies", "topRated"], getDataTopRatedMovie);
   const { data: dataUpcoming, isLoading: isLoadingUpcoming } =
     useQuery<INowPlayingMovie>(["movies", "upcoming"], getDataUpcomingMovie);
-  const { data: dataLatest, isLoading: isLoadingLatest } =
-    useQuery<ITopRatedMovie>(["movies", "latest"], getDataLatestMovie);
+  const { data: dataLatest, isLoading: isLoadingLatest } = useQuery<IDataMovie>(
+    ["movies", "latest"],
+    getDataLatestMovie
+  );
 
   const bigMovieMatch = useMatch("/movies/:name/:movieId");
   const overlayClicked = () => {
@@ -215,9 +197,9 @@ function Home() {
                     <>
                       <BigImage
                         style={{
-                          backgroundImage: `linear-gradient(to top,black,transparent),url(${makeImagePath(
+                          backgroundImage: `linear-gradient(to top, rgba(30, 30, 30, 1),transparent),url(${makeImagePath(
                             clickedMovie.backdrop_path,
-                            "w500"
+                            "w780"
                           )})`,
                         }}
                       />
@@ -243,7 +225,7 @@ function Home() {
                         </BigTimes>
                         <BigGenre>
                           {clickedMovie.genre_ids.map((num) => (
-                            <span>{genreArr[num]}</span>
+                            <span key={num}>{movieGenreArr[num]}</span>
                           ))}
                         </BigGenre>
                         <BigOverview>{clickedMovie.overview}</BigOverview>

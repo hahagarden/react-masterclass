@@ -7,9 +7,26 @@ interface IMovie {
   backdrop_path: string;
   poster_path: string;
   title: string;
+  name?: string;
   overview: string;
   genre_ids: number[];
+  first_air_date?: string;
   release_date: string;
+  origin_country?: string[];
+}
+
+export interface IShow {
+  adult?: boolean;
+  id: number;
+  backdrop_path: string;
+  poster_path: string;
+  name: string;
+  title?: string;
+  overview: string;
+  genre_ids: number[];
+  first_air_date: string;
+  release_date?: string;
+  origin_country: string[];
 }
 
 export interface INowPlayingMovie {
@@ -23,7 +40,7 @@ export interface INowPlayingMovie {
   totla_results: number;
 }
 
-export interface ITopRatedMovie {
+export interface IDataMovie {
   page: number;
   results: IMovie[];
   total_pages: number;
@@ -52,17 +69,6 @@ export function getDataUpcomingMovie() {
   return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
-}
-
-export interface IShow {
-  backdrop_path: string;
-  first_air_date: string;
-  genre_ids: number[];
-  id: number;
-  name: string;
-  poster_path: string;
-  overview: string;
-  origin_country: string[];
 }
 
 export interface IDataShow {
@@ -94,4 +100,16 @@ export function getDataTopRatedShow() {
   return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
+}
+
+export function getSearchMovie(keyword: string | null) {
+  return fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${keyword}`
+  ).then((response) => response.json());
+}
+
+export function getSearchShow(keyword: string | null) {
+  return fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${keyword}`
+  ).then((response) => response.json());
 }

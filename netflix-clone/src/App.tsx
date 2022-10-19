@@ -10,10 +10,12 @@ function App() {
     <Router basename={process.env.PUBLIC_URL}>
       <Header />
       <Routes>
-        <Route path="/tv" element={<Tv />}>
-          <Route path="/tv/:name/:showId" element={<Home />} />
+        <Route path="/tv/" element={<Tv />}>
+          <Route path=":name/:showId" element={<Tv />} />
         </Route>
-        <Route path="/search" element={<Search />} />
+        <Route path="/search/" element={<Search />}>
+          <Route path=":name/:searchId" element={<Search />} />
+        </Route>
         <Route path="/" element={<Home />}>
           <Route path="/movies/:name/:movieId" element={<Home />} />
         </Route>
